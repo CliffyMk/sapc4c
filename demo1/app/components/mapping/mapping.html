@@ -8,13 +8,13 @@
         </div>
         <div class="col-xs-12 col-sm-3 col-md-3 col-lg-3">
             <table class="table table-condensed table-hover">
-                <thead>
+                <thead droppable="true">
                     <th>tabel headding</th>
                 </thead>
                 <tbody>
                     <tr ng-repeat="data in vm.leftColumn track by $index">
-                        <td>
-                            <div id="" ondrop="drop(event)" ondragover="allowDrop(event)" class="tableColumn"><span ng-if="data">{{data}}</span></div>
+                        <td ondragstart="drag(event)" ondrop="drop(event)" ondragover="allowDrop(event)" draggable="true">
+                            <a id="{{data}}" class="btn btn-success" ng-model="modelData[$index]" draggable="false">{{data}}</a>
                         </td>
                     </tr>
                 </tbody>
@@ -39,20 +39,44 @@
             <table class="table table-striped table-hover">
                 <thead>
                     <tr>
-                        <th>selection table</th>
+                        <th ng-model="vm.data.header">vm.selection table</th>{{vm.data.header}}
                     </tr>
                 </thead>
-                <tbody ondrop="drop(event)" ondragover="allowDrop(event)">
+                <tbody ondrop="vm.allowDrop">
                     <tr>
-                        <td id="drag1" draggable="true" ondragstart="drag(event)">
-                            <a class="btn btn-success">option 1</a>
+                        <td id="drag1" draggable="true" droppable="true">
+                            <a class="btn btn-success">option 1-{{data.abcxyz}}</a>
                         </td>
                     </tr>
                     <tr>
-                        <td id="drag2" draggable="true" ondragstart="drag(event)"><a class="btn  btn-success">option 2</a></td>
+                        <td id="drag2" ng-model="abcxyz" draggable="true"><a class="btn  btn-success">option 2</a></td>
                     </tr>
                 </tbody>
             </table>
         </div>
     </div>
 </div>
+<!-- <script type="text/javascript">
+var srcDragElement = null;
+
+function allowDrop(ev) {
+    ev.preventDefault();
+}
+
+function drag(ev) {
+    srcDragElement = ev.target;
+    console.log("dragged innerHTML is:" + srcDragElement.innerHTML);
+    ev.dataTransfer.setData("text/html", srcDragElement.innerHTML);
+}
+
+function drop(ev) {
+    ev.preventDefault();
+    ev.stopPropagation();
+    if (srcDragElement != this) {
+        console.log("src innerHTML=" + srcDragElement.innerHTML + "target innerhtml:" + this.innerHTML);
+        srcDragElement.innerHTML = ev.target.innerHTML;
+        ev.target.innerHTML = ev.dataTransfer.getData("text/html");
+    }
+}
+</script>
+ -->

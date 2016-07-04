@@ -3,6 +3,7 @@
     angular.module('MappingApp')
         .controller('MappingController', ['$scope', function ($scope) {
             var vm = this;
+            var srcDragElement = null;
             console.log("mapping contrller loaded");
             vm.getLeftColumn = function () {
                 vm.leftColumn = [];
@@ -20,7 +21,6 @@
                             $.each(data, function (index, val) {
                                 vm.leftColumn.push(val);
                             });
-                            vm.leftColumn.shift();
                             $scope.$apply();
 
                         };
@@ -56,6 +56,29 @@
 
                     };
                 fileInput.addEventListener('change', readFile);
+            }
+
+            $scope.handleDragEvent = function (ev) {
+                console.log("drag event occured");
+                srcDragElement = ev.target;
+                ev.dataTransfer.setData("text/html", srcDragElement.innerHTML);
+            }
+
+            $scope.handleDropEvent = function (ev) {
+                console.log("drop event occ");
+                ev.preventDefault();
+                ev.stopPropagation();
+                if (srcDragElement != this) {
+                    // $scope.$apply(function () {
+                    //     srcDragElement = ev.target.innerHTML;
+                    //     ev.target.innerHTML = ev.dataTransfer.getData("text/html");
+                    // });
+
+                }
+            }
+            $scope.allowDrop = function (ev) {
+                console.log("drop allowed");
+                ev.preventDefault();
             }
         }]);
 })();
