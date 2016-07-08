@@ -1,82 +1,62 @@
 <div class="container-fluid" ng-controller="MappingController as vm">
     <div class="row">
-        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-            <input id="csv" type="file" class="form-control" ng-click="vm.getLeftColumn()">
+        <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+            <legend>
+                <h3>Mapping Object</h3>
+            </legend>
+            <input id="leftCsv" type="file" class="form-control">
         </div>
-        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-            <input id="csv2" type="file" class="form-control" ng-click="vm.getRightColumn()">
+        <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+            <legend>
+                <h3>Mapped Object</h3>
+            </legend>
+            <input id="rightCsv" type="file" class="form-control">
         </div>
-        <div class="col-xs-12 col-sm-3 col-md-3 col-lg-3">
+        <hr>
+        <div ng-if="vm.leftColumn">
+            <button class="btn btn-success" ng-click="exportToExcel('#tableToExport')">Export TO Excel</button>
+        </div>
+        <hr>
+        <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8" id="tableToExport">
+            <legend>
+                <h3>Object Mapping Table</h3>
+            </legend>
             <table class="table table-condensed table-hover">
-                <thead droppable="true">
-                    <th>tabel headding</th>
+                <thead>
+                    <th>{{vm.leftColumnObject}}</th>
+                    <th>{{vm.rightColumnObject}}</th>
                 </thead>
                 <tbody>
                     <tr ng-repeat="data in vm.leftColumn track by $index">
-                        <td ondragstart="drag(event)" ondrop="drop(event)" ondragover="allowDrop(event)" draggable="true">
-                            <a id="{{data}}" class="btn btn-success" ng-model="modelData[$index]" draggable="false">{{data}}</a>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-        <div class="col-xs-12 col-sm-3 col-md-3 col-lg-3">
-            <table class="table table-condensed table-hover">
-                <thead>
-                    <th>tabel headding</th>
-                </thead>
-                <tbody>
-                    <tr ng-repeat="data in vm.rightColumn track by $index">
                         <td>
-                            <div id="" ondrop="drop(event)" ondragover="allowDrop(event)" class="tableColumn">{{data}}</div>
+                            <div class="tableColumn">{{data}}</div>
+                        </td>
+                        <td draggable="true">
+                            <div class="tableColumn">--No Mapping--</div>
                         </td>
                     </tr>
                 </tbody>
             </table>
         </div>
         <!-- the mapping table wil be here -->
-        <div class="col-xs-12 col-sm-2 col-md-2 col-lg-2">
-            <table class="table table-striped table-hover">
+        <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+            <table class="table table-condensed table-hover">
                 <thead>
-                    <tr>
-                        <th ng-model="vm.data.header">vm.selection table</th>{{vm.data.header}}
-                    </tr>
+                    <th>Mapping Attribute</th>
                 </thead>
-                <tbody ondrop="vm.allowDrop">
-                    <tr>
-                        <td id="drag1" draggable="true" droppable="true">
-                            <a class="btn btn-success">option 1-{{data.abcxyz}}</a>
+                <tbody>
+                    <tr ng-repeat="data in vm.rightColumn track by $index">
+                        <td draggable="true">
+                            <div class="tableColumn">{{data}}</div>
                         </td>
-                    </tr>
-                    <tr>
-                        <td id="drag2" ng-model="abcxyz" draggable="true"><a class="btn  btn-success">option 2</a></td>
                     </tr>
                 </tbody>
             </table>
         </div>
     </div>
 </div>
-<!-- <script type="text/javascript">
-var srcDragElement = null;
-
-function allowDrop(ev) {
-    ev.preventDefault();
+<style>
+[draggable] {
+    cursor: move;
 }
-
-function drag(ev) {
-    srcDragElement = ev.target;
-    console.log("dragged innerHTML is:" + srcDragElement.innerHTML);
-    ev.dataTransfer.setData("text/html", srcDragElement.innerHTML);
-}
-
-function drop(ev) {
-    ev.preventDefault();
-    ev.stopPropagation();
-    if (srcDragElement != this) {
-        console.log("src innerHTML=" + srcDragElement.innerHTML + "target innerhtml:" + this.innerHTML);
-        srcDragElement.innerHTML = ev.target.innerHTML;
-        ev.target.innerHTML = ev.dataTransfer.getData("text/html");
-    }
-}
-</script>
- -->
+</style>
