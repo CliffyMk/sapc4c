@@ -1,22 +1,30 @@
-<div class="container-fluid" ng-controller="MappingController as vm">
+<div class="container-fluid well" ng-controller="MappingController as vm">
     <div class="row">
         <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
             <legend>
-                <h3>Mapping Object</h3>
+                <h3>SAP Object</h3>
             </legend>
+            <input type="text" name="sapObject" id="inputSapObject" class="form-control" value="" required="required" pattern="" title="" placeholder="e.g. Account">
             <input id="leftCsv" type="file" class="form-control">
         </div>
         <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
             <legend>
-                <h3>Mapped Object</h3>
+                <h3>Salesforce Object</h3>
             </legend>
+            <input type="text" name="SfObject" id="inputSfObject" class="form-control" value="" required="required" pattern="" title="" placeholder="e.g. Account">
             <input id="rightCsv" type="file" class="form-control">
         </div>
-        <hr>
-        <div ng-if="vm.leftColumn">
-            <button class="btn btn-success" ng-click="exportToExcel('#tableToExport')">Export TO Excel</button>
+    </div>
+    <br>
+    <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+            <div ng-if="vm.leftColumn">
+                <div class="badge">This will be changed</div>
+                <button class="btn btn-success" ng-click="exportToExcel('#tableToExport')">Export TO Excel</button>
+            </div>
         </div>
-        <hr>
+    </div>
+    <div class="row">
         <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8" id="tableToExport">
             <legend>
                 <h3>Object Mapping Table</h3>
@@ -40,6 +48,9 @@
         </div>
         <!-- the mapping table wil be here -->
         <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+            <legend>
+                <h3>Mapping Table</h3>
+            </legend>
             <table class="table table-condensed table-hover">
                 <thead>
                     <th>Mapping Attribute</th>

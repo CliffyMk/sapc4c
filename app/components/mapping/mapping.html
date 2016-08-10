@@ -1,0 +1,103 @@
+<div class="container-fluid well" ng-controller="MappingController as vm">
+    <div class="row">
+        <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+            <legend>
+                <h3>SAP Object</h3>
+            </legend>
+            <input type="text" name="sapObject" id="inputSapObject" class="form-control" value="" required="required" pattern="" title="" placeholder="Object Name e.g. Account">
+            <input id="leftCsv" type="file" class="form-control">
+        </div>
+        <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+            <legend>
+                <h3>Salesforce Object</h3>
+            </legend>
+            <input type="text" name="SfObject" id="inputSfObject" class="form-control" value="" required="required" pattern="" title="" placeholder="Object Name e.g. Account">
+            <input id="rightCsv" type="file" class="form-control">
+        </div>
+    </div>
+    <br>
+    <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+            <div ng-if="vm.leftColumn">
+                <div class="badge">This will be changed</div>
+                <button class="btn btn-success" ng-click="exportToExcel('#tableToExport')">Export TO Excel</button>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4" id="tableToExport">
+            <legend>
+                <h3>Object Mapping Table</h3>
+            </legend>
+            <!-- <table class="table table-condensed table-hover"> -->
+            <table class="table">
+                <thead>
+                    <th>{{vm.leftColumnObject}}</th>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="data in vm.rightColumn track by $index">
+                        <td ng-click="vm.getSrcAttribute(data)" ng-class="{'highlight':vm.srcAttr===data}">
+                            {{data}}
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4" id="tableToExport">
+            <legend>
+                <h3>Object Mapping Table</h3>
+            </legend>
+            <!-- <table class="table table-condensed table-hover"> -->
+            <table class="table">
+                <thead>
+                    <th>{{vm.rightColumnObject}}</th>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="data in vm.rightColumn track by $index">
+                        <td ng-click="vm.setDestAttribute(data)">
+                            {{data}}
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <!-- the mapping table wil be here -->
+        <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+            <legend>
+                <h3>Mapping Table</h3>
+            </legend>
+            <table class="table table-condensed table-hover">
+                <thead>
+                    <th>Mapping Attribute</th>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="data in vm.rightColumn track by $index">
+                        <td ng-click="vm.getSrcAttribute(data)">
+                            {{data}}
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<style>
+[draggable] {
+    cursor: move;
+}
+
+tr:hover {
+    background: #aaa;
+    color: #fff;
+}
+
+tr:active {
+    background: #eee;
+    color: #fff;
+}
+
+.highlight {
+    background: #aaa;
+    color: white;
+}
+</style>
