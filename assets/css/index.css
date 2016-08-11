@@ -29,5 +29,5 @@ a#mapSaveButton:hover {
 div#savedMappingDiv {
     border-left: 1px solid;
     padding-left: 25px;
-    min-height: 145px;
+    min-height: 500px;
 }
