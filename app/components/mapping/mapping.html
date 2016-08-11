@@ -1,41 +1,48 @@
 <div class="container-fluid well" ng-controller="MappingController as vm">
     <div class="row">
-        <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
-            <legend>
-                <h3>SAP Object</h3>
-            </legend>
-            <input type="text" name="sapObject" id="inputSapObject" class="form-control" value="" required="required" pattern="" title="" placeholder="Object Name e.g. Account">
-            <input id="leftCsv" type="file" class="form-control">
-        </div>
-        <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+        <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
             <legend>
                 <h3>Salesforce Object</h3>
             </legend>
-            <input type="text" name="SfObject" id="inputSfObject" class="form-control" value="" required="required" pattern="" title="" placeholder="Object Name e.g. Account">
-            <input id="rightCsv" type="file" class="form-control">
+            <input type="text" name="sapObject" id="inputSapObject" class="form-control" value="" required="required" pattern="" title="" placeholder="Object Name e.g. Account" ng-model="vm.inputSapObject">
+            <input id="leftCsv" type="file" class="form-control" ng-model="file1" ng-change="vm.getFileName($event,1)">
         </div>
-    </div>
-    <br>
-    <div class="row">
-        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-            <div ng-if="vm.leftColumn">
-                <div class="badge">This will be changed</div>
-                <button class="btn btn-success" ng-click="exportToExcel('#tableToExport')">Export TO Excel</button>
+        <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+            <legend>
+                <h3>SAP Object</h3>
+            </legend>
+            <input type="text" name="SfObject" id="inputSfObject" class="form-control" value="" required="required" pattern="" title="" placeholder="Object Name e.g. Account" ng-model="vm.inputSfObject">
+            <input id="rightCsv" type="file" class="form-control" ng-model="file1" ng-change="vm.getFileName($event,2)">
+        </div>
+        <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6" id="savedMappingDiv">
+            <legend>
+                <h4>Saved Mapping</h4>
+            </legend>
+            <div class="row">
+                <div ng-repeat="(key,value) in vm.savedMapping">
+                    <span class="btn btn-info btn-lg" style="float:left;">
+                        {{key}}&nbsp;&nbsp;
+                        <span class="badge">
+                            <i class="fa fa-arrow-down" ng-click="vm.showSavedMapping(key)"></i>
+                        </span>
+                    <span class="badge" ng-click="vm.deleteSavedMapping(key)">
+                            <i class="fa fa-times" ></i>
+                        </span>
+                    </span>
+                </div>
             </div>
         </div>
     </div>
-    <div class="row">
-        <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4" id="tableToExport">
+    <br>
+    <div class="row" ng-show="vm.leftColumn.length>0">
+        <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3" id="tableToExport">
             <legend>
-                <h3>Object Mapping Table</h3>
+                <h3>Salesforce Object Attribute</h3>
             </legend>
             <!-- <table class="table table-condensed table-hover"> -->
             <table class="table">
-                <thead>
-                    <th>{{vm.leftColumnObject}}</th>
-                </thead>
                 <tbody>
-                    <tr ng-repeat="data in vm.rightColumn track by $index">
+                    <tr ng-repeat="data in vm.leftColumn track by $index">
                         <td ng-click="vm.getSrcAttribute(data)" ng-class="{'highlight':vm.srcAttr===data}">
                             {{data}}
                         </td>
@@ -43,15 +50,15 @@
                 </tbody>
             </table>
         </div>
-        <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4" id="tableToExport">
+        <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
             <legend>
-                <h3>Object Mapping Table</h3>
+                <h3>SAP Object Attributes</h3>
             </legend>
             <!-- <table class="table table-condensed table-hover"> -->
+            <div ng-hide="vm.rightColumn.length>0">
+                <div class="bg-info">Please Upload a file</div>
+            </div>
             <table class="table">
-                <thead>
-                    <th>{{vm.rightColumnObject}}</th>
-                </thead>
                 <tbody>
                     <tr ng-repeat="data in vm.rightColumn track by $index">
                         <td ng-click="vm.setDestAttribute(data)">
@@ -62,42 +69,34 @@
             </table>
         </div>
         <!-- the mapping table wil be here -->
-        <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+        <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6" ng-show="vm.fieldMappings">
             <legend>
                 <h3>Mapping Table</h3>
             </legend>
             <table class="table table-condensed table-hover">
-                <thead>
-                    <th>Mapping Attribute</th>
-                </thead>
                 <tbody>
-                    <tr ng-repeat="data in vm.rightColumn track by $index">
-                        <td ng-click="vm.getSrcAttribute(data)">
-                            {{data}}
+                    <tr ng-repeat="(k,v) in vm.fieldMappings track by $index">
+                        <td style="width: 240px;min-width:240px;">
+                            <span class="badge" ng-click="vm.deleteMapping(k)"><i class="fa fa-times" ></i></span>&nbsp;&nbsp;{{k}}-->
+                        </td>
+                        <td>
+                            <span ng-repeat="(key,value) in v track by $index">
+                                <i class="btn  btn-sm btn-info">{{value}}</i>
+                            </span>
                         </td>
                     </tr>
                 </tbody>
             </table>
         </div>
     </div>
+    <div class="row" ng-show="vm.rightColumn">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+            <a class="btn btn-success" ng-click="vm.saveMapping()" id="mapSaveButton">Save Mapping</a>
+        </div>
+    </div>
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+        <div class="row" id="displayMsg">
+            <a class="btn btn-lg" ng-show="vm.displayMsg" ng-model="vm.displayMsg" ng-class="{'btn-danger':vm.displayMsgType==='error','btn-success':vm.displayMsgType==='success'}">{{vm.displayMsg}}</a>
+        </div>
+    </div>
 </div>
-<style>
-[draggable] {
-    cursor: move;
-}
-
-tr:hover {
-    background: #aaa;
-    color: #fff;
-}
-
-tr:active {
-    background: #eee;
-    color: #fff;
-}
-
-.highlight {
-    background: #aaa;
-    color: white;
-}
-</style>
