@@ -1,13 +1,12 @@
+body {
+    font-family: 'Raleway', sans-serif;
+}
+
 div#displayMsg {
     position: fixed;
     text-align: center;
     top: 30px;
     width: 100%;
-}
-
-tr:active {
-    background: #eee;
-    color: #fff;
 }
 
 .highlight {
@@ -27,7 +26,34 @@ a#mapSaveButton:hover {
 }
 
 div#savedMappingDiv {
-    border-left: 1px solid;
+    border-left: 1px solid #aaa;
     padding-left: 25px;
     min-height: 500px;
+}
+
+.hide {
+    display: none;
+}
+
+div#mappingDiv {
+    margin-top: 5px;
+    border-top: 1px solid #aaa;
+    height: 400px;
+    overflow: scroll;
+    display: block;
+}
+
+span.modBadge {
+    font-size: 23px;
+    color: white;
+    margin-left: 10px;
+}
+
+div#leftAttrColumn {
+    min-height: 600px;
+    border-right: 1px solid #ddd;
+}
+
+h3.attrHeading {
+    text-align: center;
 }

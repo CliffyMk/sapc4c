@@ -25,7 +25,7 @@
 }
 
 .slideInDown {
-    animation: slideInDown 1s infinite;
-    -webkit-animation: slideInDown 1s infinite;
+    animation: slideInDown 1s;
+    -webkit-animation: slideInDown 1s;
     /* Safari and Chrome */
 }

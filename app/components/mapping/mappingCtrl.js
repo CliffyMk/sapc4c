@@ -7,7 +7,9 @@
             vm.srcDragElement = {};
             vm.fieldMappings = {};
             vm.savedMapping = {};
-
+            vm.savedSapAttrColumn = {};
+            vm.savedSfAttrColumn = {};
+            vm.editingMode = false;
             var leftFileInput = document.getElementById("leftCsv");
             var readLeftFile = function () {
                 if (readLeftFile !== null) {
@@ -85,8 +87,7 @@
                         /* iterate through array or object */
                     });
                 if (flag === true) {
-
-                    vm.fieldMappings[srcAttr].push(destAttr);
+                    vm.fieldMappings[srcAttr].unshift(destAttr);
                     vm.srcAttr = srcAttr;
                 }
 
@@ -95,14 +96,17 @@
             vm.saveMapping = function () {
                 if (vm.inputSfObject && vm.inputSapObject) {
                     if (vm.fieldMappings !== null) {
-                        if (vm.savedMapping[vm.inputSapObject + "->" + vm.inputSfObject]) {
+                        if (vm.savedMapping[vm.inputSfObject + "->" + vm.inputSapObject] && !vm.editingMode) {
                             displayMsg('error', "Mapping Already Saved");
-
                         } else {
-                            vm.savedMapping[vm.inputSapObject + "->" + vm.inputSfObject] = vm.fieldMappings;
+                            vm.savedMapping[vm.inputSfObject + "->" + vm.inputSapObject] = vm.fieldMappings;
+                            vm.savedSapAttrColumn[vm.inputSapObject] = vm.rightColumn;
+                            vm.savedSfAttrColumn[vm.inputSfObject] = vm.leftColumn;
                             displayMsg('success', "Successfully Saved!!");
+                            clearInputs();
                         }
                         vm.fieldMappings = {};
+                        vm.editingMode = false;
                     }
                 } else {
                     displayMsg('error', "Please Enter Object Name");
@@ -112,14 +116,24 @@
                         $("input#inputSapObject").focus();
                 }
             }
+
             vm.deleteSavedMapping = function (key) {
                 delete vm.savedMapping[key];
             }
             vm.showSavedMapping = function (key) {
-                console.log("show saved mapping");
+                $("table#" + key).toggleClass('hide');
             };
             vm.deleteMapping = function (key) {
                 delete vm.fieldMappings[key];
+            }
+            vm.editSavedMapping = function (Gkey) {
+                var sapObj = Gkey.split("->")[1];
+                vm.fieldMappings = vm.savedMapping[Gkey];
+                vm.rightColumn = vm.savedSapAttrColumn[sapObj];
+                displayMsg("success", "Object Attribute successfully loaded");
+                vm.inputSapObject = sapObj;
+                vm.editingMode = true;
+                vm.showSavedMapping(Gkey);
             }
 
             var displayMsg = function (type, msg) {
@@ -130,7 +144,10 @@
                     }, 1000);
                 }
                 /*-----------*/
-
+            var clearInputs = function () {
+                vm.inputSapObject = "";
+                vm.rightColumn = {};
+            }
 
         }]);
 })();

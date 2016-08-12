@@ -15,6 +15,6 @@
                     url: '/mapped',
                     templateUrl: 'app/components/mapped/mapped.html'
                 });
-            $urlRouterProvider.otherwise('/main');
+            $urlRouterProvider.otherwise('/mapping');
         }]);
 }());
