@@ -8,8 +8,13 @@
                         <legend>
                             <h3 class="attrHeading">Salesforce Object</h3>
                         </legend>
-                        <input type="text" name="sapObject" id="inputSapObject" class="form-control" value="" required="required" placeholder="Object Name e.g. Account" ng-model="vm.inputSfObject" ng-disabled="vm.editingMode">
-                        <input id="leftCsv" type="file" class="form-control" ng-show="vm.inputSfObject.length>0" ng-disabled="vm.editingMode">
+                        <div>
+                            <input type="text" name="sfObject" id="inputSfObject" class="form-control" value="" required="required" placeholder="Object Name e.g. Account" ng-model="vm.inputSfObject" ng-disabled="vm.sfObjectInitialised">
+                            <div ng-hide="vm.sfObjectInitialised">
+                                <input id="leftCsv" type="file" class="form-control" ng-hide="!vm.inputSfObject">
+                            </div>
+                            <button class="btn btn-block btn-danger" ng-show="vm.sfObjectInitialised" ng-click="vm.reloadView()">Change Salesforce Object</button>
+                        </div>
                     </div>
                     <div class="row" ng-show="vm.leftColumn.length>0" style="padding:4px;">
                         <legend>
@@ -30,14 +35,14 @@
                 <!-- end of sf attr section -->
                 <!-- sap attr section -->
                 <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
-                    <div class="row" style="padding:4px;">
+                    <div class="row" style="padding:4px;    height: 153px;">
                         <legend>
                             <h3 class="attrHeading">SAP Object</h3>
                         </legend>
-                        <input type="text" name="SfObject" id="inputSfObject" class="form-control" value="" required="required" pattern="" title="" placeholder="Object Name e.g. Account" ng-model="vm.inputSapObject" ng-disabled="vm.editingMode">
-                        <input id="rightCsv" type="file" class="form-control" ng-show="vm.inputSapObject.length>0" ng-disabled="vm.editingMode">
+                        <input type="text" name="SapObject" id="inputSapObject" class="form-control" value="" required="required" pattern="" title="" placeholder="Object Name e.g. Account" ng-model="vm.inputSapObject" ng-disabled="!vm.inputSfObject || vm.editingMode">
+                        <input id="rightCsv" type="file" class="form-control" ng-hide="!vm.inputSapObject" ng-disabled="vm.editingMode">
                     </div>
-                    <div class="row" ng-show="vm.leftColumn.length>0" style="padding:4px;">
+                    <div class="row" ng-show="vm.rightColumn.length>0" style="padding:4px;">
                         <legend>
                             <h3 class="attrHeading">SAP Object Attributes</h3>
                         </legend>
@@ -63,7 +68,7 @@
         <!-- saved mapping section -->
         <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6" id="savedMappingDiv">
             <div class="row">
-                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" ng-hide="vm.editingMode">
                     <legend>
                         <h4>Mappings</h4>
                     </legend>
@@ -97,9 +102,11 @@
                 <br>
                 <hr>
                 <!-- current mapping section -->
-                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" id="mappingDiv">
+                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" id="mappingDiv" ng-class="{'editableDiv':vm.editingMode}">
                     <span class="btn btn-block btn-primary" ng-show="vm.inputSapObject.length>0 && !vm.editingMode">{{vm.inputSfObject}} <i class="fa fa-arrow-right"></i>{{ vm.inputSapObject}}</span>
-                    <span class="btn btn-block btn-danger" ng-show="vm.editingMode" style="text-align:center;">Editing Mode</span>
+                    <span class="btn btn-block btn-danger" ng-show="vm.editingMode" style="text-align:left;">Editing Mode
+                            <span class="pull-right">Relationship&nbsp;&nbsp;:&nbsp;&nbsp;{{vm.inputSfObject}} <i class="fa fa-arrow-right"></i>{{ vm.inputSapObject}}</span>
+                    </span>
                     <table class="table table-condensed table-hover table-bordered">
                         <tbody>
                             <tr ng-repeat="(k,v) in vm.fieldMappings track by $index">
@@ -120,14 +127,16 @@
         </div>
     </div>
     <!-- save button -->
-    <div class="row" ng-show="vm.rightColumn">
-        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-            <a class="btn btn-success" ng-click="vm.saveMapping()" id="mapSaveButton" style="right: 103px;">Save & Add More</a>
-            <a class="btn btn-warning" id="mapSaveButton">Export Json</a>
+    <div ng-show="vm.inputSapObject">
+        <div class="row" ng-show="vm.rightColumn">
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                <a class="btn btn-success" ng-click="vm.saveMapping()" id="mapSaveButton" style="right: 103px;">Add</a>
+                <a class="btn btn-warning" id="mapSaveButton">Export Mapping</a>
+            </div>
         </div>
-    </div>
-    <!-- alert box -->
-    <div class="row" id="displayMsg">
-        <a class="btn btn-lg" ng-show="vm.displayMsg" ng-model="vm.displayMsg" ng-class="{'btn-danger':vm.displayMsgType==='error','btn-success':vm.displayMsgType==='success'}">{{vm.displayMsg}}</a>
+        <!-- alert box -->
+        <div class="row" id="displayMsg">
+            <a class="btn btn-lg" ng-show="vm.displayMsg" ng-model="vm.displayMsg" ng-class="{'btn-danger':vm.displayMsgType==='error','btn-success':vm.displayMsgType==='success'}">{{vm.displayMsg}}</a>
+        </div>
     </div>
 </div>

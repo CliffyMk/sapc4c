@@ -39,7 +39,6 @@ div#mappingDiv {
     margin-top: 5px;
     border-top: 1px solid #aaa;
     height: 400px;
-    overflow: scroll;
     display: block;
 }
 
@@ -56,4 +55,10 @@ div#leftAttrColumn {
 
 h3.attrHeading {
     text-align: center;
+}
+
+div.editableDiv {
+    position: absolute;
+    top: -6px;
+    background: #eee;
 }

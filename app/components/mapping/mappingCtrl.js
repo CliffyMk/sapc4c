@@ -1,7 +1,7 @@
 (function () {
     'use strict';
     angular.module('MappingApp')
-        .controller('MappingController', ['$scope', 'Excel', '$timeout', function ($scope, Excel, $timeout) {
+        .controller('MappingController', ['$scope', 'Excel', '$timeout', '$state', function ($scope, Excel, $timeout, $state) {
             console.log("mapping contrller loaded");
             var vm = this;
             vm.srcDragElement = {};
@@ -10,6 +10,7 @@
             vm.savedSapAttrColumn = {};
             vm.savedSfAttrColumn = {};
             vm.editingMode = false;
+            vm.sfObjectInitialised = false;
             var leftFileInput = document.getElementById("leftCsv");
             var readLeftFile = function () {
                 if (readLeftFile !== null) {
@@ -26,6 +27,7 @@
 
                         vm.leftColumnObject = vm.leftColumn[0];
                         vm.leftColumn.shift();
+                        vm.sfObjectInitialised = true;
                         // vm.leftColumn.pop();
                         vm.mappedColumn = vm.leftColumn;
 
@@ -135,7 +137,9 @@
                 vm.editingMode = true;
                 vm.showSavedMapping(Gkey);
             }
-
+            vm.reloadView = function () {
+                $state.reload();
+            }
             var displayMsg = function (type, msg) {
                     vm.displayMsgType = type;
                     vm.displayMsg = msg;
@@ -145,8 +149,10 @@
                 }
                 /*-----------*/
             var clearInputs = function () {
-                vm.inputSapObject = "";
-                vm.rightColumn = {};
+                vm.inputSapObject = undefined;
+                vm.rightColumn = [];
+                // var file = $("#rightCsv");
+                // file.replaceWith(file = file.clone(true));
             }
 
         }]);
