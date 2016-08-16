@@ -1,7 +1,7 @@
 (function () {
     'use strict';
     angular.module('MappingApp')
-        .controller('MappingController', ['$scope', 'Excel', '$timeout', '$state', function ($scope, Excel, $timeout, $state) {
+        .controller('MappingController', ['$scope', 'Excel', '$timeout', '$state', '$window', function ($scope, Excel, $timeout, $state, $window) {
             console.log("mapping contrller loaded");
             var vm = this;
             vm.srcDragElement = {};
@@ -11,6 +11,8 @@
             vm.savedSfAttrColumn = {};
             vm.editingMode = false;
             vm.sfObjectInitialised = false;
+
+            // end of variable declaration
             var leftFileInput = document.getElementById("leftCsv");
             var readLeftFile = function () {
                 if (readLeftFile !== null) {
@@ -109,6 +111,7 @@
                         }
                         vm.fieldMappings = {};
                         vm.editingMode = false;
+                        $window.scrollTo(0, 0);
                     }
                 } else {
                     displayMsg('error', "Please Enter Object Name");
@@ -132,13 +135,25 @@
                 var sapObj = Gkey.split("->")[1];
                 vm.fieldMappings = vm.savedMapping[Gkey];
                 vm.rightColumn = vm.savedSapAttrColumn[sapObj];
-                displayMsg("success", "Object Attribute successfully loaded");
                 vm.inputSapObject = sapObj;
                 vm.editingMode = true;
                 vm.showSavedMapping(Gkey);
             }
             vm.reloadView = function () {
                 $state.reload();
+            }
+            vm.rmAttrFromMapping = function (key, value) {
+                $.each(vm.fieldMappings[key], function (index, val) {
+
+                    if (val === value) {
+                        vm.fieldMappings[key].splice(index, 1);
+                        if (vm.fieldMappings[key].length === 0)
+                            delete vm.fieldMappings[key];
+                        return;
+                    }
+
+                    /* iterate through array or object */
+                });
             }
             var displayMsg = function (type, msg) {
                     vm.displayMsgType = type;
