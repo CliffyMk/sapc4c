@@ -144,7 +144,6 @@
             }
             vm.rmAttrFromMapping = function (key, value) {
                 $.each(vm.fieldMappings[key], function (index, val) {
-
                     if (val === value) {
                         vm.fieldMappings[key].splice(index, 1);
                         if (vm.fieldMappings[key].length === 0)
