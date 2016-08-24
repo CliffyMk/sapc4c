@@ -6,11 +6,12 @@
             var vm = this;
             vm.srcDragElement = {};
             vm.fieldMappings = {};
-            vm.savedMapping = {};
             vm.savedSapAttrColumn = {};
             vm.savedSfAttrColumn = {};
             vm.editingMode = false;
             vm.sfObjectInitialised = false;
+            vm.valueMappingMode = false;
+            vm.savedMapping = {};
 
             // end of variable declaration
             var leftFileInput = document.getElementById("leftCsv");
@@ -78,26 +79,9 @@
                 }
             }
 
-            function insIntoFieldMapping(srcAttr, destAttr) {
-                if (vm.fieldMappings[srcAttr] === undefined)
-                    vm.fieldMappings[srcAttr] = [];
-                var flag = true;
-                if (vm.fieldMappings[srcAttr] !== null)
-                    $.each(vm.fieldMappings[srcAttr], function (index, val) {
-                        if (destAttr === val) {
-                            flag = false;
-                            return;
-                        }
-                        /* iterate through array or object */
-                    });
-                if (flag === true) {
-                    vm.fieldMappings[srcAttr].unshift(destAttr);
-                    vm.srcAttr = srcAttr;
-                }
-
-            }
 
             vm.saveMapping = function () {
+
                 if (vm.inputSfObject && vm.inputSapObject) {
                     if (vm.fieldMappings !== null) {
                         if (vm.savedMapping[vm.inputSfObject + "->" + vm.inputSapObject] && !vm.editingMode) {
@@ -105,7 +89,6 @@
                         } else {
                             vm.savedMapping[vm.inputSfObject + "->" + vm.inputSapObject] = vm.fieldMappings;
                             vm.savedSapAttrColumn[vm.inputSapObject] = vm.rightColumn;
-                            vm.savedSfAttrColumn[vm.inputSfObject] = vm.leftColumn;
                             displayMsg('success', "Successfully Saved!!");
                             clearInputs();
                         }
@@ -142,17 +125,41 @@
             vm.reloadView = function () {
                 $state.reload();
             }
-            vm.rmAttrFromMapping = function (key, value) {
-                $.each(vm.fieldMappings[key], function (index, val) {
+            vm.rmAttrFromMapping = function (key, data, value) {
+                var obj = data.fieldMapping;
+                $.each(obj, function (index, val) {
                     if (val === value) {
-                        vm.fieldMappings[key].splice(index, 1);
-                        if (vm.fieldMappings[key].length === 0)
+                        obj.splice(index, 1);
+                        if (obj.length === 0)
                             delete vm.fieldMappings[key];
                         return;
                     }
 
                     /* iterate through array or object */
                 });
+            }
+            vm.showValueMappingFn = function () {
+                vm.valueMappingMode = true;
+            }
+            vm.showValMapBoxFn = function (key, value) {
+                vm.showValMapBox = true;
+                console.log(key);
+                console.log(value);
+                vm.currValMapKey = key;
+                vm.currValMapVal = value.fieldMapping;
+            }
+            vm.saveValMap = function () {
+                vm.showValMapBox = false;
+            }
+            vm.exportMapping = function (btn) {
+                alert("exported Successfully");
+                var data = vm.savedMapping;
+                var json = JSON.stringify(data);
+                var blob = new Blob([json], { type: "application/json" });
+                var url = URL.createObjectURL(blob);
+                var a = btn.target;
+                a.download = "mapping.json";
+                a.href = url;
             }
             var displayMsg = function (type, msg) {
                     vm.displayMsgType = type;
@@ -169,5 +176,21 @@
                 // file.replaceWith(file = file.clone(true));
             }
 
+            function insIntoFieldMapping(srcAttr, destAttr) {
+                vm.fieldMappings[srcAttr] = vm.fieldMappings[srcAttr] || {};
+                vm.fieldMappings[srcAttr].fieldMapping = vm.fieldMappings[srcAttr].fieldMapping || [];
+                var data = vm.fieldMappings[srcAttr].fieldMapping;
+                var flag = true;
+                $.each(data, function (index, val) {
+                    if (destAttr === val) {
+                        flag = false;
+                        return;
+                    }
+                });
+                if (flag === true) {
+                    data.unshift(destAttr);
+                    vm.srcAttr = srcAttr;
+                }
+            }
         }]);
 })();

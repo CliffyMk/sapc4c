@@ -1,0 +1,25 @@
+<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" id="mappingDiv" ng-class="{'editableDiv':vm.editingMode}">
+    <span class="btn btn-block btn-primary" ng-show="vm.inputSapObject.length>0 && !vm.editingMode">{{vm.inputSfObject}} <i class="fa fa-arrow-right"></i>{{ vm.inputSapObject}}</span>
+    <span class="btn btn-block btn-danger" ng-show="vm.editingMode" style="text-align:left;">Editing Mode
+           <!--  <span class="pull-right">Relationship&nbsp;&nbsp;:&nbsp;&nbsp;{{vm.inputSfObject}} <i class="fa fa-arrow-right"></i>{{ vm.inputSapObject}}</span> -->
+    </span>
+    <table class="table table-condensed table-hover table-bordered">
+        <tbody>
+            <tr ng-repeat="(key,value) in vm.fieldMappings track by $index">
+                <td style="width: 240px;min-width:240px;">
+                    <span class="badge" ng-click="vm.deleteMapping(key)">
+                    	<i class="fa fa-times" ></i>
+                    </span> &nbsp;&nbsp;{{key}}
+                </td>
+                <td>
+                    <span ng-repeat="row in value.fieldMapping track by $index">
+                        <span class="btn  btn-sm btn-info">{{row}}
+                         	<i class="fa fa-times" ng-click="vm.rmAttrFromMapping(key,value,row)"></i>
+                        </span>
+                    </span>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <span class="btn btn-danger" ng-click="vm.saveMapping()" ng-show="vm.editingMode">Save</span>
+</div>

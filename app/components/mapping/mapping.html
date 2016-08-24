@@ -1,5 +1,5 @@
 <div class="container-fluid well" ng-controller="MappingController as vm">
-    <div class="row">
+    <div class="row" ng-hide="vm.valueMappingMode">
         <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
             <div class="row">
                 <!-- salesforce attribute section -->
@@ -54,7 +54,7 @@
                             <tbody>
                                 <tr ng-repeat="data in vm.rightColumn track by $index">
                                     <td ng-click="vm.setDestAttribute(data)">
-                                        {{data}}
+                                        {{::data}}
                                     </td>
                                 </tr>
                             </tbody>
@@ -68,75 +68,38 @@
         <!-- saved mapping section -->
         <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6" id="savedMappingDiv">
             <div class="row">
-                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" ng-hide="vm.editingMode">
-                    <legend>
-                        <h4>Mappings</h4>
-                    </legend>
-                    <div ng-repeat="(Gkey,Gvalue) in vm.savedMapping">
-                        <span class="pull-left modBadge">
-                            <i class="fa fa-times" ng-click="vm.deleteSavedMapping(Gkey)"></i>
-                         </span>
-                        <span class="pull-right modBadge" style="margin-right:10px;">
-                            <i class="fa fa-pencil" ng-click="vm.editSavedMapping(Gkey)"></i>
-                        </span>
-                        <div>
-                            <div class="btn btn-primary btn-block" ng-click="vm.showSavedMapping('m'+$index)">{{Gkey}}
-                            </div>
-                            <table class="table table-condensed table-hover hide" id="{{'m'+$index}}" style="border: 1px solid #aaa;">
-                                <tbody>
-                                    <tr ng-repeat="(Pkey,Pvalue) in Gvalue track by $index">
-                                        <td style="width: 240px;min-width:240px;">
-                                            {{Pkey}} <i class="fa fa-arrow-right"></i>
-                                        </td>
-                                        <td>
-                                            <span ng-repeat="(Ckey,Cvalue) in Pvalue track by $index">
-                                            <i class="btn  btn-sm btn-info">{{Cvalue}}</i>
-                                        </span>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
+                <saved-mapping></saved-mapping>
                 <br>
                 <hr>
                 <!-- current mapping section -->
-                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" id="mappingDiv" ng-class="{'editableDiv':vm.editingMode}">
-                    <span class="btn btn-block btn-primary" ng-show="vm.inputSapObject.length>0 && !vm.editingMode">{{vm.inputSfObject}} <i class="fa fa-arrow-right"></i>{{ vm.inputSapObject}}</span>
-                    <span class="btn btn-block btn-danger" ng-show="vm.editingMode" style="text-align:left;">Editing Mode
-                           <!--  <span class="pull-right">Relationship&nbsp;&nbsp;:&nbsp;&nbsp;{{vm.inputSfObject}} <i class="fa fa-arrow-right"></i>{{ vm.inputSapObject}}</span> -->
-                    </span>
-                    <table class="table table-condensed table-hover table-bordered">
-                        <tbody>
-                            <tr ng-repeat="(k,v) in vm.fieldMappings track by $index">
-                                <td style="width: 240px;min-width:240px;">
-                                    <span class="badge" ng-click="vm.deleteMapping(k)"><i class="fa fa-times" ></i></span>&nbsp;&nbsp;{{k}}</i>
-                                </td>
-                                <td>
-                                    <span ng-repeat="(key,value) in v track by $index">
-                                <i class="btn  btn-sm btn-info">{{value}} <i class="fa fa-times" ng-click="vm.rmAttrFromMapping(k,value)"></i></i>
-                            </span>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    <span class="btn btn-danger" ng-click="vm.saveMapping()" ng-show="vm.editingMode">Save</span>
-                </div>
+                <current-mapping></current-mapping>
             </div>
         </div>
     </div>
     <!-- save button -->
-    <div ng-show="vm.inputSapObject">
-        <div class="row" ng-show="vm.rightColumn">
+    <div ng-show="vm.inputSapObject && !vm.valueMappingMode">
+        <div class="row bottomRightMenu" ng-show="vm.rightColumn">
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                <a class="btn btn-success" ng-click="vm.saveMapping()" id="mapSaveButton" style="right: 129px;">Add</a>
-                <a class="btn btn-warning" id="mapSaveButton">Export Mapping</a>
+                <a class="btn btn-success" ng-click="vm.saveMapping()" ">Add</a>
+                <a class="btn btn-info " ng-click="vm.showValueMappingFn() ">Value Mapping</a>
             </div>
         </div>
         <!-- alert box -->
-        <div class="row" id="displayMsg">
-            <a class="btn btn-lg" ng-show="vm.displayMsg" ng-model="vm.displayMsg" ng-class="{'btn-danger':vm.displayMsgType==='error','btn-success':vm.displayMsgType==='success'}">{{vm.displayMsg}}</a>
+        <div class="row " id="displayMsg ">
+            <a class="btn btn-lg " ng-show="vm.displayMsg " ng-model="vm.displayMsg " ng-class="{ 'btn-danger':vm.displayMsgType==='error' , 'btn-success':vm.displayMsgType==='success' } ">{{vm.displayMsg}}</a>
+        </div>
+    </div>
+    <div class="row " ng-show="vm.valueMappingMode ">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 ">
+            <saved-mapping ng-hide="vm.showValMapBox "></saved-mapping>
+            <value-mapping ng-show="vm.showValMapBox "></value-mapping>
+        </div>
+        <div class="row bottomRightMenu ">
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 ">  
+            <a  class="btn btn-info " ng-click="vm.valueMappingMode=false "><i class="fa fa-arrow-left " ></i></a>
+                <a href="# " class="btn btn-warning " ng-click="vm.exportMapping($event) ">Export Mapping</a>
+
+            </div>
         </div>
     </div>
 </div>

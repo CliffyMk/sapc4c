@@ -2,31 +2,7 @@
 (function () {
     'use strict';
     var app = angular.module('MappingApp');
-    // app.directive('draggable', function () {
-    //     return {
-    //         restrict: 'A', // E = Element, A = Attribute, C = Class, M = Comment
-    //         link: function ($scope, element, attr, controller) {
-    //             element[0].addEventListener('dragstart', $scope.handleDragEvent, false);
-    //             element[0].addEventListener('dragend', $scope.handleDragEnd, false);
-    //             element[0].addEventListener('dragover', $scope.handleDragOver, false);
-    //             element[0].addEventListener('drop', $scope.handleDropEvent, false);
-    //         }
-    //     };
-    // });
-    // app.directive('droppable', function () {
-    //     // Runs during compile
-    //     return {
-    //         restrict: 'A', // E = Element, A = Attribute, C = Class, M = Comment
-    //         link: function (vm, element, attr, controller) {
-    //             element[0].addEventListener('drop', vm.handleDropEvent, false);
-    //             // element.bind("drop", function (event) {
-    //             //     /* Act on the event */
-    //             //     event.preventDefault();
-    //             //     console.log("drop called");
-    //             // });
-    //         }
-    //     };
-    // });
+
     app.directive('appHeader', function () {
         // Runs during compile
         return {
@@ -41,4 +17,24 @@
             templateUrl: 'app/shared/footer.html',
         };
     });
+    app.directive('savedMapping', [function () {
+        // Runs during compile
+        return {
+            restrict: 'E',
+            templateUrl: 'app/components/mapping/partials/savedMapping.html'
+        };
+    }]);
+    app.directive('currentMapping', [function () {
+        return {
+            restrict: 'E',
+            templateUrl: 'app/components/mapping/partials/currMapping.html'
+        };
+    }]);
+    app.directive('valueMapping', [function () {
+        // Runs during compile
+        return {
+            restrict: 'E',
+            templateUrl: 'app/components/mapping/partials/valueMapping.html'
+        };
+    }]);
 }());
