@@ -77,10 +77,10 @@
         </div>
     </div>
     <!-- save button -->
-    <div ng-show="vm.inputSapObject && !vm.valueMappingMode">
+    <div>
         <div class="row bottomRightMenu" ng-show="vm.rightColumn">
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                <a class="btn btn-success" ng-click="vm.saveMapping()" ">Add</a>
+                <a class="btn btn-success" ng-click="vm.saveMapping()" ng-show="vm.inputSapObject && !vm.valueMappingMode">Add</a>
                 <a class="btn btn-info " ng-click="vm.showValueMappingFn() ">Value Mapping</a>
             </div>
         </div>
@@ -95,10 +95,9 @@
             <value-mapping ng-show="vm.showValMapBox "></value-mapping>
         </div>
         <div class="row bottomRightMenu ">
-            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 ">  
-            <a  class="btn btn-info " ng-click="vm.valueMappingMode=false "><i class="fa fa-arrow-left " ></i></a>
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 ">
+                <a class="btn btn-info " ng-click="vm.valueMappingMode=false "><i class="fa fa-arrow-left " ></i></a>
                 <a href="# " class="btn btn-warning " ng-click="vm.exportMapping($event) ">Export Mapping</a>
-
             </div>
         </div>
     </div>
